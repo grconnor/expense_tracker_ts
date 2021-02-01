@@ -12,3 +12,10 @@ tsc main.ts --watch
 
 let project_name: (string | number) = 
 let project_name: string = 
+
+IS A relationship 
+
+A member of the staff IS A person/human.
+
+A bank deposit IS A method of salary payment.
+

@@ -1,16 +1,24 @@
-export {}
+export {};
 
-let project_name = '===Expense Tracker===';
+let project_name = "===Expense Tracker===";
 console.log(project_name.toUpperCase());
 
 class Person {
-  static id_counter: number = 0
-  id: number;
-  name: string;
+  private static id_counter: number = 0;
+  private id: number;
+  private name: string;
 
-  constructor(name: string) {
+  protected constructor(name: string) {
     this.id = ++Person.id_counter;
     this.name = name;
+  }
+
+  public getId(): number {
+    return this.id;
+  }
+
+  public getName(): string {
+    return this.name;
   }
 
   toString(): string {
@@ -18,8 +26,80 @@ class Person {
   }
 }
 
-let connor = new Person('Connor')
+class Staff extends Person {
+  private salary: number;
+  private salaryEarned: number;
+
+  constructor(name: string, salary: number) {
+    super(name);
+    this.salary = salary;
+    this.salaryEarned = 0;
+  }
+
+  public receivedSalary() {
+    this.salaryEarned += this.salaryEarned;
+  }
+
+  public getSalaryEarned(): number {
+    return this.salaryEarned;
+  }
+
+  public toString() {
+    return `${super.toString()}, received a total of ${this.getSalaryEarned()}`;
+  }
+}
+
+class Client extends Person {
+  private paid: number = 0;
+  private totalToPay: number;
+  private company: string = null;
+
+  constructor(name: string, totalToPay: number, company?: string) {
+    super(name);
+    this.totalToPay = totalToPay;
+    if (company) {
+      this.company = company;
+    }
+  }
+
+  public pay(amount: number) {
+    this.paid += amount;
+  }
+
+  public getPaid(): number {
+    return this.paid;
+  }
+
+  private getRemainingToPay(): number {
+    return this.totalToPay - this.paid;
+  }
+
+  public toString(): string {
+    return `${super.toString()}${this.company ? ' from the company ' + this.company: ''} has ${this.getRemainingToPay()} kr left to pay`;
+  }
+}
+
+let connor = new Staff("Connor", 350);
+connor.receivedSalary();
 console.log(connor.toString());
 
-let joe = new Person('Joe');
+let joe = new Staff("Joe", 500);
+joe.receivedSalary();
 console.log(joe.toString());
+
+let john = new Staff("John", 650);
+john.receivedSalary();
+console.log(john.toString());
+
+let sebastian = new Staff("Sebastian", 500);
+sebastian.receivedSalary();
+console.log(sebastian.toString());
+
+let conrad = new Client('Conrad', 5000);
+let jesse = new Client('Jesse', 7500, 'Mobility Motors');
+
+conrad.pay(1000);
+jesse.pay(4750);
+
+console.log(conrad.toString());
+console.log(jesse.toString());
