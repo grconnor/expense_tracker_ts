@@ -75,7 +75,39 @@ class Client extends Person {
   }
 
   public toString(): string {
-    return `${super.toString()}${this.company ? ' from the company ' + this.company: ''} has ${this.getRemainingToPay()} kr left to pay`;
+    return `${super.toString()}${
+      this.company ? " from the company " + this.company : ""
+    } has ${this.getRemainingToPay()} kr left to pay`;
+  }
+}
+
+class Company {
+  private name: string;
+  private staffList: Staff[];
+  private clientsList: Client[];
+
+  constructor(name: string, staffList: Staff[], clientsList: Client[]) {
+    this.name = name;
+    this.staffList = staffList;
+    this.clientsList = clientsList;
+  }
+
+  private getTotalSpent(): number {
+    return this.staffList
+      .map((staff) => staff.getSalaryEarned())
+      .reduce((sum, current) => sum + current, 0);
+  }
+
+  private getTotalEarned(): number {
+    return this.clientsList
+      .map((client) => client.getPaid())
+      .reduce((sum, current) => sum + current, 0);
+  }
+
+  public toString(): string {
+    return `Company name: ${
+      this.name
+    } Earned: ${this.getTotalEarned()} Spent: ${this.getTotalSpent()}`;
   }
 }
 
@@ -95,11 +127,19 @@ let sebastian = new Staff("Sebastian", 500);
 sebastian.receivedSalary();
 console.log(sebastian.toString());
 
-let conrad = new Client('Conrad', 5000);
-let jesse = new Client('Jesse', 7500, 'Mobility Motors');
+let conrad = new Client("Conrad", 5000);
+let jesse = new Client("Jesse", 7500, "Mobility Motors");
 
 conrad.pay(1000);
 jesse.pay(4750);
 
 console.log(conrad.toString());
 console.log(jesse.toString());
+
+let martianBrand = new Company(
+  "Martian",
+  [connor, joe, john, sebastian],
+  [conrad, jesse]
+);
+
+console.log(martianBrand.toString());

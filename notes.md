@@ -19,3 +19,4 @@ A member of the staff IS A person/human.
 
 A bank deposit IS A method of salary payment.
 
+Map/reduce

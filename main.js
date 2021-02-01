@@ -73,10 +73,31 @@ var Client = /** @class */ (function (_super) {
         return this.totalToPay - this.paid;
     };
     Client.prototype.toString = function () {
-        return "" + _super.prototype.toString.call(this) + (this.company ? ' from company ' + this.company : '') + " has " + this.getRemainingToPay() + " left to pay";
+        return "" + _super.prototype.toString.call(this) + (this.company ? " from the company " + this.company : "") + " has " + this.getRemainingToPay() + " kr left to pay";
     };
     return Client;
 }(Person));
+var Company = /** @class */ (function () {
+    function Company(name, staffList, clientsList) {
+        this.name = name;
+        this.staffList = staffList;
+        this.clientsList = clientsList;
+    }
+    Company.prototype.getTotalSpent = function () {
+        return this.staffList
+            .map(function (staff) { return staff.getSalaryEarned(); })
+            .reduce(function (sum, current) { return sum + current; }, 0);
+    };
+    Company.prototype.getTotalEarned = function () {
+        return this.clientsList
+            .map(function (client) { return client.getPaid(); })
+            .reduce(function (sum, current) { return sum + current; }, 0);
+    };
+    Company.prototype.toString = function () {
+        return "Company name: " + this.name + " Earned: " + this.getTotalEarned() + " Spent: " + this.getTotalSpent();
+    };
+    return Company;
+}());
 var connor = new Staff("Connor", 350);
 connor.receivedSalary();
 console.log(connor.toString());
@@ -89,9 +110,11 @@ console.log(john.toString());
 var sebastian = new Staff("Sebastian", 500);
 sebastian.receivedSalary();
 console.log(sebastian.toString());
-var conrad = new Client('Conrad', 5000);
-var jesse = new Client('Jesse', 7500, 'Mobility Motors');
+var conrad = new Client("Conrad", 5000);
+var jesse = new Client("Jesse", 7500, "Mobility Motors");
 conrad.pay(1000);
 jesse.pay(4750);
 console.log(conrad.toString());
 console.log(jesse.toString());
+var martianBrand = new Company("Martian", [connor, joe, john, sebastian], [conrad, jesse]);
+console.log(martianBrand.toString());
